@@ -82,7 +82,23 @@ private:
     double averageDepthHelper(AVLNode *node) const;
 
     AVLNode* removeByRankHelper(AVLNode *node,int rank);
+
+    bool containsHelper(const Comparable &x, AVLNode *node) const;
 };
+
+template<typename Comparable>
+bool AVLTree<Comparable>::containsHelper(const Comparable &x, AVLTree::AVLNode *node) const {
+    if(node == nullptr){
+        return false;
+    }
+    if(x < node->element){
+        return containsHelper(x,node->left);
+    }else if(x > node->element){
+        return containsHelper(x,node->right);
+    }else{
+        return true;
+    }
+}
 
 template<typename Comparable>
 typename AVLTree<Comparable>::AVLNode* AVLTree<Comparable>::removeByRankHelper(AVLTree::AVLNode *node, int rank) {
@@ -377,13 +393,7 @@ typename AVLTree<Comparable>::AVLNode* AVLTree<Comparable>::findMax(AVLNode * t)
 // public contains: follow the contains in BST, referring to textbook, Figure 4.17 and Figure 4.18
 template<typename Comparable>
 bool AVLTree<Comparable>::contains( const Comparable & x ) const {
-    if(root == nullptr){
-        return false;
-    }
-    if(x == root->element){
-        return true;
-    }
-    return false;
+    return containsHelper(x,root);
 }
 
 // public insert: following BST, referring to textbook, Figure 4.17 and Figure 4.23
